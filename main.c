@@ -2,10 +2,11 @@
 #include <stdio.h>
 #include <string.h>
 
-/**
- * Auto-generated code below aims at helping you parse
- * the standard input according to the problem statement.
- **/
+typedef struct maillon_t
+{
+  int valeur;
+  struct maillon_t* suivant;
+}maillon_t;
 
 int main()
 {
