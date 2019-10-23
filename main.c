@@ -8,6 +8,22 @@ typedef struct maillon_t
   struct maillon_t* suivant;
 }maillon_t;
 
+void my_error()
+{
+    fprintf(stderr, "Erreur\n");
+    exit(1);
+}
+
+maillon_t* create_maillon(int valeur, maillon_t* suivant)
+{
+    maillon_t* maillon = (maillon_t*)malloc(sizeof(maillon_t));
+    if (maillon == NULL)
+      my_error();
+    maillon->valeur = valeur;
+    maillon->suivant = suivant;
+    return maillon;
+}
+
 int main()
 {
     int N;
@@ -16,11 +32,6 @@ int main()
         char instruction[11];
         scanf("%s", instruction);
     }
-
-    // Write an action using printf(). DON'T FORGET THE TRAILING \n
-    // To debug: fprintf(stderr, "Debug messages...\n");
-
     printf("answer\n");
-
     return 0;
 }
