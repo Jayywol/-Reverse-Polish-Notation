@@ -15,7 +15,7 @@ void my_error()
     exit(1);
 }
 
-// Fonction permettant la creation d'un seul maillon
+// Fonction permettant la creation (et allocation de memoire) d'un seul maillon
 maillon_t* create_maillon(int valeur, maillon_t* suivant)
 {
     maillon_t* maillon = (maillon_t*)malloc(sizeof(maillon_t));
@@ -24,6 +24,16 @@ maillon_t* create_maillon(int valeur, maillon_t* suivant)
     maillon->valeur = valeur;
     maillon->suivant = suivant;
     return maillon;
+}
+
+// Methode permettant de liberer l'allocation de memoire pour le maillon
+void free_maillon(maillon_t* maillon)
+{
+  if (maillon != NULL)
+  {
+    free_libere(maillon->suivant);
+    free(mailon);
+  }
 }
 
 // Fonction principale
