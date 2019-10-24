@@ -9,7 +9,17 @@ typedef struct maillon_t
   struct maillon_t* suivant;
 }maillon_t;
 
-//Fonction permettant de verifier si la chaine de caractere est un chiffre
+//Fonction permettant de verifier si la chaine de caractere est une lettre/mot
+int is_alpha(char *str)
+{
+  int i = 0;
+  while (str[i++])
+    if (isalpha(str[i]))
+      return (1);
+  return (0);
+}
+
+//Fonction permettant de verifier si la chaine de caractere est un chiffre/nombre
 int is_num(char *str)
 {
   int i = 0;
