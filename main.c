@@ -1,12 +1,23 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
+#include <ctype.h>
 
 typedef struct maillon_t
 {
   int valeur;
   struct maillon_t* suivant;
 }maillon_t;
+
+//Fonction permettant de verifier si la chaine de caractere est un chiffre
+int is_num(char *str)
+{
+  int i = 0;
+  while (str[i++])
+    if (isdigit(str[i]))
+      return (1);
+  return (0);
+}
 
 // Methode permettant d'exit avec affichage d'erreur
 void my_error()
@@ -31,8 +42,8 @@ void free_maillon(maillon_t* maillon)
 {
   if (maillon != NULL)
   {
-    free_libere(maillon->suivant);
-    free(mailon);
+    free_maillon(maillon->suivant);
+    free(maillon);
   }
 }
 
