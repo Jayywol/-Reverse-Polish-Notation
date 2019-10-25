@@ -57,6 +57,30 @@ void free_maillon(maillon_t* maillon)
   }
 }
 
+// Fonction permettant de verifier l'operateur
+maillon_t* check_operateur(char *str, maillon_t* maillon)
+{
+  if (!strcmp(str, "ADD")) // addtionner
+    printf("Il faut addtionner\n");
+  else if (!strcmp(str, "SUB")) // soustaire
+    printf("Il faut soustraire\n");
+  else if (!strcmp(str, "MUL")) // multiplier
+    printf("Il faut multiplier\n");
+  else if (!strcmp(str, "DIV")) //diviser
+    printf("Il faut diviser\n");
+  else if (!strcmp(str, "MOD")) // modulo
+    printf("Il faut modulo\n");
+  else if (!strcmp(str, "POP")) // retirer le dernier element de la pile
+    printf("Il faut enlever le dernier element de la pile\n");
+  else if (!strcmp(str, "DUP")) // depliquer le dernier element de la pile
+    printf("Il faut dupliquer le dernier element de la pile\n");
+  else if (!strcmp(str, "SWP")) // echanger les deux derniers elements de la pile
+    printf("Il faut echanger les deux derniers elements de la pile\n");
+  else
+    printf("Cet operateur n'existe pas\n");
+  return (maillon);
+}
+
 // Fonction principale
 int main()
 {
