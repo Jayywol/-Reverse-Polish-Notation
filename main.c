@@ -32,7 +32,7 @@ int is_num(char *str)
 // Methode permettant d'exit avec affichage d'erreur
 void my_error()
 {
-    fprintf(stderr, "Erreur\n");
+    fprintf(stderr, "Erreur\n"); // Affichage sortie erreur
     exit(1);
 }
 
@@ -55,6 +55,18 @@ void free_maillon(maillon_t* maillon)
     free_maillon(maillon->suivant);
     free(maillon);
   }
+}
+
+// Fonction permettant d'inserer un maillon
+maillon_t* maillon_insere(maillon_t* maillon, maillon_t* element)
+{
+  if (maillon == NULL)
+  {
+    element->suivant = NULL;
+    return element;
+  }
+  element->suivant = maillon;
+  return element;
 }
 
 // Fonction permettant de verifier l'operateur
