@@ -58,7 +58,7 @@ void free_maillon(maillon_t* maillon)
 }
 
 // Fonction permettant d'inserer un maillon
-maillon_t* maillon_insere(maillon_t* maillon, maillon_t* element)
+maillon_t* insert_maillon(maillon_t* maillon, maillon_t* element)
 {
   if (maillon == NULL)
   {
@@ -68,6 +68,19 @@ maillon_t* maillon_insere(maillon_t* maillon, maillon_t* element)
   element->suivant = maillon;
   return element;
 }
+
+// Fonction permettant d'afficher la liste des maillons
+void show_maillon(maillon_t* maillon)
+{
+  if (maillon != NULL)
+    {
+
+      show_maillon(maillon->suivant);
+      printf("%d -> ", maillon->valeur);
+    }
+  else
+    printf("\n");
+  }
 
 // Fonction permettant de verifier l'operateur
 maillon_t* check_operateur(char *str, maillon_t* maillon)
