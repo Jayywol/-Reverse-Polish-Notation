@@ -30,9 +30,9 @@ int is_num(char *str)
 }
 
 // Methode permettant d'exit avec affichage d'erreur
-void my_error()
+void my_error(char *str)
 {
-    fprintf(stderr, "Erreur\n"); // Affichage sortie erreur
+    fprintf(stderr, "%s\n", str); // Affichage sortie erreur
     exit(1);
 }
 
@@ -41,7 +41,7 @@ maillon_t* create_maillon(int valeur, maillon_t* suivant)
 {
     maillon_t* maillon = (maillon_t*)malloc(sizeof(maillon_t));
     if (maillon == NULL)
-      my_error();
+      my_error("Erreur : allocation de memoire");
     maillon->valeur = valeur;
     maillon->suivant = suivant;
     return maillon;
@@ -110,12 +110,19 @@ maillon_t* check_operateur(char *str, maillon_t* maillon)
 int main()
 {
     int N;
+    maillon_t* maillon = NULL;
     scanf("%d", &N);
     for (int i = 0; i < N; i++)
     {
         char instruction[11];
         scanf("%s", instruction);
+        if (is_num(instruction))
+          maillon = insert_maillon(maillon, create_maillon(atoi(instruction), maillon));
+        if (is_alpha(instruction))
+          maillon = check_operateur(instruction, maillon);
+        show_maillon(maillon);
     }
-    printf("answer\n");
+    //show_maillon(maillon);
+    free_maillon(maillon);
     return 0;
 }
