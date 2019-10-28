@@ -9,7 +9,7 @@ typedef struct maillon_t
   struct maillon_t* suivant;
 }maillon_t;
 
-//Fonction permettant de verifier si la chaine de caractere est une lettre/mot
+//Fonction permettant de verifier si la chaine de caractere est un caractere alphanumerique
 int is_alpha(char *str)
 {
   int i = -1;
@@ -36,14 +36,14 @@ void my_error(char *str)
     exit(1);
 }
 
-// Fonction permettant la creation (et allocation de memoire) d'un seul maillon
+// Fonction permettant la creation d'un seul maillon
 maillon_t* create_maillon(int valeur, maillon_t* suivant)
 {
-    maillon_t* maillon = (maillon_t*)malloc(sizeof(maillon_t));
+    maillon_t* maillon = (maillon_t*)malloc(sizeof(maillon_t)); // allocation de memoire pour un maillon
     if (maillon == NULL)
       my_error("Erreur : allocation de memoire");
-    maillon->valeur = valeur;
-    maillon->suivant = suivant;
+    maillon->valeur = valeur; // renseigne la valeur dans le maillon
+    maillon->suivant = suivant; // pointe vers le prochain maillon
     return maillon;
 }
 
@@ -52,7 +52,7 @@ void free_maillon(maillon_t* maillon)
 {
   if (maillon != NULL)
   {
-    free_maillon(maillon->suivant);
+    free_maillon(maillon->suivant); // appel recursive afin de liberer chaque maillon
     free(maillon);
   }
 }
@@ -74,13 +74,12 @@ void show_maillon(maillon_t* maillon)
 {
   if (maillon != NULL)
     {
-
       show_maillon(maillon->suivant);
       printf("%d -> ", maillon->valeur);
     }
   else
     printf("\n");
-  }
+}
 
 // Fonction permettant de verifier l'operateur
 maillon_t* check_operateur(char *str, maillon_t* maillon)
@@ -116,13 +115,12 @@ int main()
     {
         char instruction[11];
         scanf("%s", instruction);
-        if (is_num(instruction))
+        if (is_num(instruction)) // verifie si l'entree est un chiffre
           maillon = insert_maillon(maillon, create_maillon(atoi(instruction), maillon));
-        if (is_alpha(instruction))
+        if (is_alpha(instruction)) // verifie si l'entree est une caractere alphanumerique
           maillon = check_operateur(instruction, maillon);
         show_maillon(maillon);
     }
-    //show_maillon(maillon);
     free_maillon(maillon);
     return 0;
 }
