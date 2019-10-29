@@ -9,7 +9,7 @@ typedef struct maillon_t
   struct maillon_t* suivant;
 }maillon_t;
 
-//Fonction permettant de verifier si la chaine de caractere est un caractere alphanumerique
+//Fonction permettant de verifier si la chaine de caractere est une lettre/mot
 int is_alpha(char *str)
 {
   int i = -1;
@@ -36,14 +36,14 @@ void my_error(char *str)
     exit(1);
 }
 
-// Fonction permettant la creation d'un seul maillon
+// Fonction permettant la creation (et allocation de memoire) d'un seul maillon
 maillon_t* create_maillon(int valeur, maillon_t* suivant)
 {
-    maillon_t* maillon = (maillon_t*)malloc(sizeof(maillon_t)); // allocation de memoire pour un maillon
+    maillon_t* maillon = (maillon_t*)malloc(sizeof(maillon_t));
     if (maillon == NULL)
       my_error("Erreur : allocation de memoire");
-    maillon->valeur = valeur; // renseigne la valeur dans le maillon
-    maillon->suivant = suivant; // pointe vers le prochain maillon
+    maillon->valeur = valeur;
+    maillon->suivant = suivant;
     return maillon;
 }
 
@@ -52,7 +52,7 @@ void free_maillon(maillon_t* maillon)
 {
   if (maillon != NULL)
   {
-    free_maillon(maillon->suivant); // appel recursive afin de liberer chaque maillon
+    free_maillon(maillon->suivant);
     free(maillon);
   }
 }
@@ -81,11 +81,24 @@ void show_maillon(maillon_t* maillon)
     printf("\n");
 }
 
+// Fonction permettant l'addition
+maillon_t* my_add(maillon_t* maillon)
+{
+  if (maillon == NULL || maillon->suivant == NULL)
+    my_error("Erreur : pas assez d'element pour additionner\n");
+  //printf("my_add()\n"); // debug
+  int value1 = maillon->suivant->valeur, value2 = maillon->valeur;
+  maillon_t* res = maillon->suivant->suivant;
+  free(maillon->suivant);
+  free(maillon);
+  return (insert_maillon((res), create_maillon(value1 + value2, res)));
+}
+
 // Fonction permettant de verifier l'operateur
 maillon_t* check_operateur(char *str, maillon_t* maillon)
 {
   if (!strcmp(str, "ADD")) // addtionner
-    printf("Il faut addtionner\n");
+    maillon = my_add(maillon);
   else if (!strcmp(str, "SUB")) // soustaire
     printf("Il faut soustraire\n");
   else if (!strcmp(str, "MUL")) // multiplier
@@ -101,7 +114,7 @@ maillon_t* check_operateur(char *str, maillon_t* maillon)
   else if (!strcmp(str, "SWP")) // echanger les deux derniers elements de la pile
     printf("Il faut echanger les deux derniers elements de la pile\n");
   else
-    printf("Cet operateur n'existe pas\n");
+    my_error("Erreur : operateur inconnu");
   return (maillon);
 }
 
@@ -115,12 +128,13 @@ int main()
     {
         char instruction[11];
         scanf("%s", instruction);
-        if (is_num(instruction)) // verifie si l'entree est un chiffre
+        if (is_num(instruction))
           maillon = insert_maillon(maillon, create_maillon(atoi(instruction), maillon));
-        if (is_alpha(instruction)) // verifie si l'entree est une caractere alphanumerique
+        if (is_alpha(instruction))
           maillon = check_operateur(instruction, maillon);
         show_maillon(maillon);
     }
+    //show_maillon(maillon);
     free_maillon(maillon);
     return 0;
 }
