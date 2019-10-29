@@ -94,6 +94,21 @@ maillon_t* my_add(maillon_t* maillon)
   return (insert_maillon((res), create_maillon(value1 + value2, res)));
 }
 
+// Fonction permettant la soustraction
+maillon_t* my_sub(maillon_t* maillon)
+{
+  if (maillon == NULL || maillon->suivant == NULL)
+  {
+    my_error("Erreur : pas assez d'element pour soustraire\n");
+    return NULL;
+  }
+  int value1 = maillon->suivant->valeur, value2 = maillon->valeur;
+  maillon_t* res = maillon->suivant->suivant;
+  free(maillon->suivant);
+  free(maillon);
+  return (insert_maillon((res), create_maillon(value1 - value2, res)));
+}
+
 // Fonction permettant de verifier l'operateur
 maillon_t* check_operateur(char *str, maillon_t* maillon)
 {
