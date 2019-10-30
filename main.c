@@ -102,11 +102,28 @@ maillon_t* my_sub(maillon_t* maillon)
     my_error("Erreur : pas assez d'element pour soustraire\n");
     return NULL;
   }
+  //printf("my_sub()\n"); // debug
   int value1 = maillon->suivant->valeur, value2 = maillon->valeur;
   maillon_t* res = maillon->suivant->suivant;
   free(maillon->suivant);
   free(maillon);
   return (insert_maillon((res), create_maillon(value1 - value2, res)));
+}
+
+// Fonction permettant la multiplication
+maillon_t* my_mul(maillon_t* maillon)
+{
+  if (maillon == NULL || maillon->suivant == NULL)
+  {
+    my_error("Erreur : pas assez d'element pour multiplier\n");
+    return NULL;
+  }
+  //printf("my_mul()\n"); // debug
+  int value1 = maillon->suivant->valeur, value2 = maillon->valeur;
+  maillon_t* res = maillon->suivant->suivant;
+  free(maillon->suivant);
+  free(maillon);
+  return (insert_maillon((res), create_maillon(value1 * value2, res)));
 }
 
 // Fonction permettant de verifier l'operateur
@@ -115,9 +132,9 @@ maillon_t* check_operateur(char *str, maillon_t* maillon)
   if (!strcmp(str, "ADD")) // addtionner
     maillon = my_add(maillon);
   else if (!strcmp(str, "SUB")) // soustaire
-    printf("Il faut soustraire\n");
+    maillon = my_sub(maillon);
   else if (!strcmp(str, "MUL")) // multiplier
-    printf("Il faut multiplier\n");
+    maillon = my_mul(maillon);
   else if (!strcmp(str, "DIV")) //diviser
     printf("Il faut diviser\n");
   else if (!strcmp(str, "MOD")) // modulo
