@@ -133,6 +133,18 @@ maillon_t* my_div(maillon_t* maillon)
   return (insert_maillon((res), create_maillon(value1 / value2, res)));
 }
 
+// Fonction permettant le modulo
+maillon_t* my_mod(maillon_t* maillon)
+{
+  if (maillon == NULL || maillon->suivant == NULL)
+    my_error("Erreur : pas assez d'element pour multiplier");
+  int value1 = maillon->suivant->valeur, value2 = maillon->valeur;
+  maillon_t* res = maillon->suivant->suivant;
+  free(maillon->suivant);
+  free(maillon);
+  return (insert_maillon((res), create_maillon(value1 % value2, res)));
+}
+
 // Fonction permettant de verifier l'operateur
 maillon_t* check_operateur(char *str, maillon_t* maillon)
 {
@@ -147,7 +159,7 @@ maillon_t* check_operateur(char *str, maillon_t* maillon)
     else if (!strcmp(str, "DIV")) //diviser
       maillon = my_div(maillon);
     else if (!strcmp(str, "MOD")) // modulo
-      printf("Il faut modulo\n");
+      maillon = my_mod(maillon);
     else if (!strcmp(str, "POP")) // retirer le dernier element de la pile
       printf("Il faut enlever le dernier element de la pile\n");
     else if (!strcmp(str, "DUP")) // depliquer le dernier element de la pile
