@@ -6,6 +6,7 @@
 typedef struct maillon_t
 {
   int valeur;
+  int tmp_1,tmp_2;
   struct maillon_t* suivant;
 }maillon_t;
 
@@ -84,9 +85,9 @@ void show_maillon(maillon_t* maillon)
 // Fonction permettant l'addition
 maillon_t* my_add(maillon_t* maillon)
 {
+  printf("my_add\n");
   if (maillon == NULL || maillon->suivant == NULL)
-    my_error("Erreur : pas assez d'element pour additionner\n");
-  //printf("my_add()\n"); // debug
+    my_error("Erreur : pas assez d'element pour additionner");
   int value1 = maillon->suivant->valeur, value2 = maillon->valeur;
   maillon_t* res = maillon->suivant->suivant;
   free(maillon->suivant);
@@ -98,11 +99,7 @@ maillon_t* my_add(maillon_t* maillon)
 maillon_t* my_sub(maillon_t* maillon)
 {
   if (maillon == NULL || maillon->suivant == NULL)
-  {
-    my_error("Erreur : pas assez d'element pour soustraire\n");
-    return NULL;
-  }
-  //printf("my_sub()\n"); // debug
+    my_error("Erreur : pas assez d'element pour soustraire");
   int value1 = maillon->suivant->valeur, value2 = maillon->valeur;
   maillon_t* res = maillon->suivant->suivant;
   free(maillon->suivant);
@@ -114,11 +111,7 @@ maillon_t* my_sub(maillon_t* maillon)
 maillon_t* my_mul(maillon_t* maillon)
 {
   if (maillon == NULL || maillon->suivant == NULL)
-  {
-    my_error("Erreur : pas assez d'element pour multiplier\n");
-    return NULL;
-  }
-  //printf("my_mul()\n"); // debug
+    my_error("Erreur : pas assez d'element pour multiplier");
   int value1 = maillon->suivant->valeur, value2 = maillon->valeur;
   maillon_t* res = maillon->suivant->suivant;
   free(maillon->suivant);
@@ -129,24 +122,27 @@ maillon_t* my_mul(maillon_t* maillon)
 // Fonction permettant de verifier l'operateur
 maillon_t* check_operateur(char *str, maillon_t* maillon)
 {
-  if (!strcmp(str, "ADD")) // addtionner
-    maillon = my_add(maillon);
-  else if (!strcmp(str, "SUB")) // soustaire
-    maillon = my_sub(maillon);
-  else if (!strcmp(str, "MUL")) // multiplier
-    maillon = my_mul(maillon);
-  else if (!strcmp(str, "DIV")) //diviser
-    printf("Il faut diviser\n");
-  else if (!strcmp(str, "MOD")) // modulo
-    printf("Il faut modulo\n");
-  else if (!strcmp(str, "POP")) // retirer le dernier element de la pile
-    printf("Il faut enlever le dernier element de la pile\n");
-  else if (!strcmp(str, "DUP")) // depliquer le dernier element de la pile
-    printf("Il faut dupliquer le dernier element de la pile\n");
-  else if (!strcmp(str, "SWP")) // echanger les deux derniers elements de la pile
-    printf("Il faut echanger les deux derniers elements de la pile\n");
-  else
+  if (str != NULL)
+  {
+    if (!strcmp(str, "ADD")) // addtionner
+      maillon = my_add(maillon);
+    else if (!strcmp(str, "SUB")) // soustaire
+      maillon = my_sub(maillon);
+    else if (!strcmp(str, "MUL")) // multiplier
+      maillon = my_mul(maillon);
+    else if (!strcmp(str, "DIV")) //diviser
+      printf("Il faut diviser\n");
+    else if (!strcmp(str, "MOD")) // modulo
+      printf("Il faut modulo\n");
+    else if (!strcmp(str, "POP")) // retirer le dernier element de la pile
+      printf("Il faut enlever le dernier element de la pile\n");
+    else if (!strcmp(str, "DUP")) // depliquer le dernier element de la pile
+      printf("Il faut dupliquer le dernier element de la pile\n");
+    else if (!strcmp(str, "SWP")) // echanger les deux derniers elements de la pile
+      printf("Il faut echanger les deux derniers elements de la pile\n");
+    else
     my_error("Erreur : operateur inconnu");
+  }
   return (maillon);
 }
 
@@ -166,7 +162,6 @@ int main()
           maillon = check_operateur(instruction, maillon);
         show_maillon(maillon);
     }
-    //show_maillon(maillon);
     free_maillon(maillon);
     return 0;
 }
