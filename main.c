@@ -132,6 +132,17 @@ maillon_t* my_mod(maillon_t* maillon)
         return (insert_maillon (tmp, create_maillon(value1 % value2, tmp)));
 }
 
+maillon_t* my_pop(maillon_t* maillon)
+{
+        maillon_t* tmp = NULL;
+        if (maillon != NULL)
+        {
+                tmp = maillon->suivant;
+                free(maillon);
+        }
+        return tmp;
+}
+
 // Fonction permettant de verifier l'operateur
 maillon_t* check_operateur(char *str, maillon_t* maillon)
 {
@@ -150,7 +161,7 @@ maillon_t* check_operateur(char *str, maillon_t* maillon)
                 else if (!strcmp(str, "MOD")) // modulo
                         maillon = my_mod(maillon);
                 else if (!strcmp(str, "POP")) // retirer le dernier element de la pile
-                        printf("Il faut enlever le dernier element de la pile\n");
+                        maillon = my_pop(maillon);
                 else if (!strcmp(str, "DUP")) // depliquer le dernier element de la pile
                         printf("Il faut dupliquer le dernier element de la pile\n");
                 else if (!strcmp(str, "SWP")) // echanger les deux derniers elements de la pile
