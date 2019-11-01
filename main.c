@@ -84,8 +84,6 @@ void show_maillon(maillon_t* maillon)
 // Fonction permettant d'initialiser le nouveau maillon a creer en liberant la memoire des deux anciens maillons
 maillon_t* my_init(maillon_t* maillon)
 {
-        if (maillon == NULL || maillon->suivant == NULL)
-                my_error("Erreur : pas assez d'element pour additionner");
         maillon_t* tmp = maillon->suivant->suivant;
         free(maillon->suivant);
         free(maillon);
@@ -139,6 +137,8 @@ maillon_t* check_operateur(char *str, maillon_t* maillon)
 {
         if (str != NULL)
         {
+                if (maillon == NULL || maillon->suivant == NULL)
+                        my_error("Erreur : pas assez d'element");
                 if (!strcmp(str, "ADD")) // addtionner
                         maillon = my_add(maillon);
                 else if (!strcmp(str, "SUB")) // soustaire
