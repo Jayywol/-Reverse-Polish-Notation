@@ -144,6 +144,14 @@ maillon_t* my_pop(maillon_t* maillon)
         return tmp;
 }
 
+// Fonction permettant de dupliquer le dernier element du maillon
+maillon_t* my_dup(maillon_t* maillon)
+{
+        if (maillon == NULL)
+                return NULL;
+        return insert_maillon(maillon, create_maillon(maillon->valeur, maillon));
+}
+
 // Fonction permettant de verifier l'operateur
 maillon_t* check_operateur(char *str, maillon_t* maillon)
 {
@@ -163,8 +171,8 @@ maillon_t* check_operateur(char *str, maillon_t* maillon)
                         maillon = my_mod(maillon);
                 else if (!strcmp(str, "POP")) // retirer le dernier element de la pile
                         maillon = my_pop(maillon);
-                else if (!strcmp(str, "DUP")) // depliquer le dernier element de la pile
-                        printf("Il faut dupliquer le dernier element de la pile\n");
+                else if (!strcmp(str, "DUP")) // dupliquer le dernier element de la pile
+                        maillon = my_dup(maillon);
                 else if (!strcmp(str, "SWP")) // echanger les deux derniers elements de la pile
                         printf("Il faut echanger les deux derniers elements de la pile\n");
                 else
