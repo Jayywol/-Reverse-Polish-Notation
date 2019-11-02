@@ -132,6 +132,7 @@ maillon_t* my_mod(maillon_t* maillon)
         return (insert_maillon (tmp, create_maillon(value1 % value2, tmp)));
 }
 
+// Fonction permettant de retirer le dernier element du maillon
 maillon_t* my_pop(maillon_t* maillon)
 {
         maillon_t* tmp = NULL;
