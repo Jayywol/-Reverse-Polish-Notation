@@ -152,6 +152,24 @@ maillon_t* my_dup(maillon_t* maillon)
         return insert_maillon(maillon, create_maillon(maillon->valeur, maillon));
 }
 
+// Fonction permettant d'echanger de place des deux derniers maillons
+maillon_t* my_swap(maillon_t* maillon)
+{
+        if (maillon == NULL || maillon->suivant == NULL)
+        {
+                my_error("ERROR");
+                return NULL;
+        }
+        if (maillon->suivant != NULL)
+        {
+                int tmp = maillon->valeur;
+                maillon->valeur = maillon->suivant->valeur;
+                maillon->suivant->valeur = tmp;
+        }
+        return (maillon);
+}
+
+
 // Fonction permettant de verifier l'operateur
 maillon_t* check_operateur(char *str, maillon_t* maillon)
 {
@@ -174,7 +192,7 @@ maillon_t* check_operateur(char *str, maillon_t* maillon)
                 else if (!strcmp(str, "DUP")) // dupliquer le dernier element de la pile
                         maillon = my_dup(maillon);
                 else if (!strcmp(str, "SWP")) // echanger les deux derniers elements de la pile
-                        printf("Il faut echanger les deux derniers elements de la pile\n");
+                        maillon = my_swap(maillon);
                 else
                         my_error("Erreur : operateur inconnu");
         }
