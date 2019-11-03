@@ -81,6 +81,59 @@ void show_maillon(maillon_t* maillon)
                 printf("\n");
 }
 
+/*
+** FONCTION OPERATEURS DE STACK : POP, DUP, SWP, ROL
+*/
+
+// Fonction permettant de retirer le dernier element du maillon
+maillon_t* my_pop(maillon_t* maillon)
+{
+        maillon_t* tmp = NULL;
+        if (maillon != NULL)
+        {
+                tmp = maillon->suivant;
+                free(maillon);
+        }
+        return tmp;
+}
+
+// Fonction permettant de dupliquer le dernier element du maillon
+maillon_t* my_dup(maillon_t* maillon)
+{
+        if (maillon == NULL)
+                return NULL;
+        return insert_maillon(maillon, create_maillon(maillon->valeur, maillon));
+}
+
+// Fonction permettant d'echanger de place des deux derniers maillons
+maillon_t* my_swap(maillon_t* maillon)
+{
+        if (maillon == NULL || maillon->suivant == NULL)
+                my_error("ERROR");
+        if (maillon->suivant != NULL)
+        {
+                int tmp = maillon->valeur;
+                maillon->valeur = maillon->suivant->valeur;
+                maillon->suivant->valeur = tmp;
+        }
+        return (maillon);
+}
+
+// Fonction permettant de remonter l'element du maillon a une position i
+int my_rol(maillon_t* previous, maillon_t* maillon, int i)
+{
+        if (i == 1)
+        {
+                maillon_t* tmp = maillon->suivant;
+                int res = maillon->valeur;
+                free(maillon);
+                previous->suivant = tmp;
+                return res;
+        }
+        else
+                return my_rol(maillon, maillon->suivant, i - 1);
+}
+
 // Fonction permettant d'initialiser le nouveau maillon a creer en liberant la memoire des deux anciens maillons
 maillon_t* my_init(maillon_t* maillon)
 {
@@ -89,6 +142,8 @@ maillon_t* my_init(maillon_t* maillon)
         free(maillon);
         return tmp;
 }
+
+// FONCTION OPERATEURS BASIQUE : ADD, SUB, MUL, DIV, MOD
 
 // Fonction permettant l'addition
 maillon_t* my_add(maillon_t* maillon)
@@ -132,44 +187,6 @@ maillon_t* my_mod(maillon_t* maillon)
         return (insert_maillon (tmp, create_maillon(value1 % value2, tmp)));
 }
 
-// Fonction permettant de retirer le dernier element du maillon
-maillon_t* my_pop(maillon_t* maillon)
-{
-        maillon_t* tmp = NULL;
-        if (maillon != NULL)
-        {
-                tmp = maillon->suivant;
-                free(maillon);
-        }
-        return tmp;
-}
-
-// Fonction permettant de dupliquer le dernier element du maillon
-maillon_t* my_dup(maillon_t* maillon)
-{
-        if (maillon == NULL)
-                return NULL;
-        return insert_maillon(maillon, create_maillon(maillon->valeur, maillon));
-}
-
-// Fonction permettant d'echanger de place des deux derniers maillons
-maillon_t* my_swap(maillon_t* maillon)
-{
-        if (maillon == NULL || maillon->suivant == NULL)
-        {
-                my_error("ERROR");
-                return NULL;
-        }
-        if (maillon->suivant != NULL)
-        {
-                int tmp = maillon->valeur;
-                maillon->valeur = maillon->suivant->valeur;
-                maillon->suivant->valeur = tmp;
-        }
-        return (maillon);
-}
-
-
 // Fonction permettant de verifier l'operateur
 maillon_t* check_operateur(char *str, maillon_t* maillon)
 {
@@ -193,6 +210,13 @@ maillon_t* check_operateur(char *str, maillon_t* maillon)
                         maillon = my_dup(maillon);
                 else if (!strcmp(str, "SWP")) // echanger les deux derniers elements de la pile
                         maillon = my_swap(maillon);
+                else if (!strcmp(str, "ROL")) // remonter l'element du maillon a la position i
+                {
+                        int i = maillon->valeur;
+                        maillon = my_pop(maillon);
+                        i = my_rol(maillon, maillon->suivant, i - 1);
+                        maillon = insert_maillon(maillon, create_maillon(i, maillon));
+                }
                 else
                         my_error("Erreur : operateur inconnu");
         }
