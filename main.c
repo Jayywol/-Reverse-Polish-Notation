@@ -32,6 +32,7 @@ int is_num(char *str)
 // Gestion d'erreur
 void my_error(char *str)
 {
+        printf("ERROR");
         fprintf(stderr, "%s\n", str); // Affichage sortie erreur
         exit(1);
 }
@@ -70,15 +71,15 @@ maillon_t* insert_maillon(maillon_t* maillon, maillon_t* element)
 }
 
 // Fonction permettant d'afficher la liste des maillons
-void show_maillon(maillon_t* maillon)
+void show_maillon(maillon_t* maillon, int i)
 {
         if (maillon != NULL)
         {
-                show_maillon(maillon->suivant);
-                printf("%d -> ", maillon->valeur);
+                show_maillon(maillon->suivant, i+1);
+                printf("%d", maillon->valeur);
+                if ( i != 0 )
+                        printf(" ");
         }
-        else
-                printf("\n");
 }
 
 /*
@@ -237,8 +238,8 @@ int main()
                         maillon = insert_maillon(maillon, create_maillon(atoi(instruction), maillon));
                 if (is_alpha(instruction))
                         maillon = check_operateur(instruction, maillon);
-                show_maillon(maillon);
         }
+        show_maillon(maillon, 0);
         free_maillon(maillon);
         return 0;
 }
