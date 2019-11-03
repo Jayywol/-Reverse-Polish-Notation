@@ -29,7 +29,7 @@ int is_num(char *str)
         return (0);
 }
 
-// Methode permettant d'exit avec affichage d'erreur
+// Gestion d'erreur
 void my_error(char *str)
 {
         fprintf(stderr, "%s\n", str); // Affichage sortie erreur
@@ -108,8 +108,6 @@ maillon_t* my_dup(maillon_t* maillon)
 // Fonction permettant d'echanger de place des deux derniers maillons
 maillon_t* my_swap(maillon_t* maillon)
 {
-        if (maillon == NULL || maillon->suivant == NULL)
-                my_error("ERROR");
         if (maillon->suivant != NULL)
         {
                 int tmp = maillon->valeur;
@@ -173,7 +171,7 @@ maillon_t* my_mul(maillon_t* maillon)
 maillon_t* my_div(maillon_t* maillon)
 {
         int value1 = maillon->suivant->valeur, value2 = maillon->valeur;
-        if (!value2) // Verification de la division par zero
+        if (!value1 || !value2) // Verification de la division par zero
                 my_error("Erreur : division par zero impossible");
         maillon_t* tmp = my_init(maillon);
         return (insert_maillon (tmp, create_maillon(value1 / value2, tmp)));
@@ -183,6 +181,8 @@ maillon_t* my_div(maillon_t* maillon)
 maillon_t* my_mod(maillon_t* maillon)
 {
         int value1 = maillon->suivant->valeur, value2 = maillon->valeur;
+        if (!value1 || !value2) // Verification de la division par zero
+                my_error("Erreur : modulo par zero impossible");
         maillon_t* tmp = my_init(maillon);
         return (insert_maillon (tmp, create_maillon(value1 % value2, tmp)));
 }
