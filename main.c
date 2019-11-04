@@ -1,15 +1,24 @@
+/*
+** main.c for   Reverse Polish Notation in /home/jayywol/Reverse-Polish-Notation
+**
+** Made by      Alexandre Ma
+** GitHub       <https://github.com/Jayywol/Reverse-Polish-Notation>
+**
+*/
+
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
 #include <ctype.h>
 
+// Declaration liste chainee "maillon_t"
 typedef struct maillon_t
 {
         int valeur;
         struct maillon_t* suivant;
 }maillon_t;
 
-//Fonction permettant de verifier si la chaine de caractere est une lettre/mot
+// Fonction permettant de verifier si la chaine de caractere est une lettre/mot
 int is_alpha(char *str)
 {
         int i = -1;
@@ -19,7 +28,7 @@ int is_alpha(char *str)
         return (0);
 }
 
-//Fonction permettant de verifier si la chaine de caractere est un chiffre/nombre
+// Fonction permettant de verifier si la chaine de caractere est un chiffre/nombre
 int is_num(char *str)
 {
         int i = -1;
@@ -27,25 +36,6 @@ int is_num(char *str)
                 if (isdigit(str[i]))
                         return (1);
         return (0);
-}
-
-// Gestion d'erreur
-void my_error(char *str)
-{
-        printf("ERROR");
-        fprintf(stderr, "%s\n", str); // Affichage raison erreur en canal sortie
-        exit(1);
-}
-
-// Fonction permettant la creation (et allocation de memoire) d'un seul maillon
-maillon_t* create_maillon(int valeur, maillon_t* suivant)
-{
-        maillon_t* maillon = (maillon_t*)malloc(sizeof(maillon_t));
-        if (maillon == NULL)
-                my_error("Erreur : allocation de memoire");
-        maillon->valeur = valeur;
-        maillon->suivant = suivant;
-        return maillon;
 }
 
 // Methode permettant de liberer l'allocation de memoire pour le maillon
@@ -56,6 +46,26 @@ void free_maillon(maillon_t* maillon)
                 free_maillon(maillon->suivant);
                 free(maillon);
         }
+}
+
+// Methode de gestion d'erreur
+void my_error(char *str, maillon_t* maillon)
+{
+        printf("ERROR");
+        fprintf(stderr, "%s\n", str); // Affichage raison erreur en canal sortie
+        free_maillon(maillon);
+        exit(1);
+}
+
+// Fonction permettant la creation (et allocation de memoire) d'un seul maillon
+maillon_t* create_maillon(int valeur, maillon_t* suivant)
+{
+        maillon_t* maillon = (maillon_t*)malloc(sizeof(maillon_t));
+        if (maillon == NULL)
+                my_error("Erreur : allocation de memoire", maillon);
+        maillon->valeur = valeur;
+        maillon->suivant = suivant;
+        return maillon;
 }
 
 // Fonction permettant d'inserer un maillon
@@ -81,10 +91,6 @@ void show_maillon(maillon_t* maillon, int i)
                         printf(" ");
         }
 }
-
-/*
-** FONCTION OPERATEURS DE STACK : POP, DUP, SWP, ROL
-*/
 
 // Fonction permettant de retirer le dernier element du maillon
 maillon_t* my_pop(maillon_t* maillon)
@@ -142,8 +148,6 @@ maillon_t* my_init(maillon_t* maillon)
         return tmp;
 }
 
-// FONCTION OPERATEURS BASIQUE : ADD, SUB, MUL, DIV, MOD
-
 // Fonction permettant l'addition
 maillon_t* my_add(maillon_t* maillon)
 {
@@ -177,8 +181,8 @@ maillon_t* my_div(maillon_t* maillon)
                 maillon = my_pop(maillon);
                 maillon = my_pop(maillon);
                 show_maillon(maillon, 0);
-                printf(" "); // Fix codingame
-                my_error("Erreur : division par zero impossible");
+                printf(" "); // Fix test
+                my_error("Erreur : division par zero impossible", maillon);
         }
         maillon_t* tmp = my_init(maillon);
         return (insert_maillon (tmp, create_maillon(value1 / value2, tmp)));
@@ -188,8 +192,14 @@ maillon_t* my_div(maillon_t* maillon)
 maillon_t* my_mod(maillon_t* maillon)
 {
         int value1 = maillon->suivant->valeur, value2 = maillon->valeur;
-        if (!value1 || !value2) // Verification de la division par zero
-                my_error("Erreur : modulo par zero impossible");
+        if (!value1 || !value2) // Verification du modulo par zero
+        {
+                maillon = my_pop(maillon);
+                maillon = my_pop(maillon);
+                show_maillon(maillon, 0);
+                printf(" "); // Fix test
+                my_error("Erreur : modulo par zero impossible", maillon);
+        }
         maillon_t* tmp = my_init(maillon);
         return (insert_maillon (tmp, create_maillon(value1 % value2, tmp)));
 }
@@ -200,7 +210,7 @@ maillon_t* check_operateur(char *str, maillon_t* maillon)
         if (str != NULL)
         {
                 if (maillon == NULL || maillon->suivant == NULL)
-                        my_error("Erreur : pas assez d'element");
+                        my_error("Erreur : pas assez d'element", maillon);
                 if (!strcmp(str, "ADD")) // addtionner
                         maillon = my_add(maillon);
                 else if (!strcmp(str, "SUB")) // soustaire
@@ -225,7 +235,7 @@ maillon_t* check_operateur(char *str, maillon_t* maillon)
                         maillon = insert_maillon(maillon, create_maillon(i, maillon));
                 }
                 else
-                        my_error("Erreur : operateur inconnu");
+                        my_error("Erreur : operateur inconnu", maillon);
         }
         return (maillon);
 }
