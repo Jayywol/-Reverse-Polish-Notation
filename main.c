@@ -33,7 +33,7 @@ int is_num(char *str)
 void my_error(char *str)
 {
         printf("ERROR");
-        fprintf(stderr, "%s\n", str); // Affichage sortie erreur
+        fprintf(stderr, "%s\n", str); // Affichage raison erreur en canal sortie
         exit(1);
 }
 
@@ -75,9 +75,9 @@ void show_maillon(maillon_t* maillon, int i)
 {
         if (maillon != NULL)
         {
-                show_maillon(maillon->suivant, i+1);
+                show_maillon(maillon->suivant, i + 1);
                 printf("%d", maillon->valeur);
-                if ( i != 0 )
+                if (i != 0)
                         printf(" ");
         }
 }
@@ -130,7 +130,7 @@ int my_rol(maillon_t* previous, maillon_t* maillon, int i)
                 return res;
         }
         else
-                return my_rol(maillon, maillon->suivant, i - 1);
+                return my_rol(maillon, maillon->suivant,i - 1);
 }
 
 // Fonction permettant d'initialiser le nouveau maillon a creer en liberant la memoire des deux anciens maillons
@@ -173,7 +173,13 @@ maillon_t* my_div(maillon_t* maillon)
 {
         int value1 = maillon->suivant->valeur, value2 = maillon->valeur;
         if (!value1 || !value2) // Verification de la division par zero
+        {
+                maillon = my_pop(maillon);
+                maillon = my_pop(maillon);
+                show_maillon(maillon, 0);
+                printf(" "); // Fix codingame
                 my_error("Erreur : division par zero impossible");
+        }
         maillon_t* tmp = my_init(maillon);
         return (insert_maillon (tmp, create_maillon(value1 / value2, tmp)));
 }
